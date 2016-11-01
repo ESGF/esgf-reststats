@@ -41,6 +41,15 @@ public enum SqlQuery {
     		"number_of_users, month, year, host_name, dataset_name, dataset_version, datetime_start, datetime_stop " +
     		"FROM esgf_dashboard.obs4mips_dmart_dataset_host_time;");
 	/** obs4mips **/
+
+    /** cmip5 **/
+    CMIP5_HOST_TIME_GEOLOCATION("SELECT * FROM esgf_dashboard.cmip5_dmart_clients_host_time_geolocation"),
+    CMIP5_MODEL_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_model_host_time"),
+    CMIP5_EXPERIMENT_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_experiment_host_time"),
+    CMIP5_VARIABLE_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_variable_host_time"),
+    CMIP5_DATASET_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_dataset_host_time");
+    /** cmip5 **/
+
 	
 	private final String sql;
 	
