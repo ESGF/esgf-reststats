@@ -39,7 +39,7 @@ public enum SqlQuery {
     OBS_DMART_DATASET_HOST_TIME("SELECT " +
     		"total_size, number_of_downloads, number_of_successful_downloads, average_duration, " +
     		"number_of_users, month, year, host_name, dataset_name, dataset_version, datetime_start, datetime_stop " +
-    		"FROM esgf_dashboard.obs4mips_dmart_dataset_host_time;");
+    		"FROM esgf_dashboard.obs4mips_dmart_dataset_host_time;"),
 	/** obs4mips **/
 
     /** cmip5 **/
