@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -13,7 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.esg.node.utils.Constants;
+import org.esg.node.utils.Field;
+import org.esg.node.utils.Row;
 import org.esg.node.utils.SqlQuery;
+import org.esg.node.utils.Table;
 
 @Path("/cmip5/variable_host_time")
 public class VariableHostTimeController {
@@ -21,36 +24,84 @@ public class VariableHostTimeController {
 	@Path("xml")
 	@GET
 	@Produces({MediaType.APPLICATION_XML})
-	public List<VariableHostTime> getXml() throws SQLException {
+	public Table<Row> getXml() throws SQLException {
 		
-		List<VariableHostTime> dmvalues = new LinkedList<VariableHostTime>(); 
-		Connection conn = null;
-		
+	    List<Row> rowList = new ArrayList<Row>();
+	    Connection conn = null;
+	    
         try {
             conn = Constants.DATASOURCE.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SqlQuery.CMIP5_VARIABLE_HOST_TIME.getSql());
             ResultSet rs = stmt.executeQuery();
             
             while (rs.next()) {
-            	Long total_size = rs.getLong("month");
-            	Long number_of_downloads = rs.getLong("number_of_downloads");
-            	Long number_of_successful_downloads = rs.getLong("number_of_successful_downloads");
-            	Integer average_duration = rs.getInt("average_duration");
-            	Integer number_of_users = rs.getInt("number_of_users");
-            	Long number_of_replica_downloads = rs.getLong("number_of_replica_downloads");
-            	Integer month = rs.getInt("month");
-            	Integer year = rs.getInt("year");
-            	String host_name = rs.getString("host_name");
-            	String variable_code = rs.getString("variable_code");
-            	String variable_long_name = rs.getString("variable_long_name");
-            	String cf_standard_name = rs.getString("cf_standard_name");
             	
-            	VariableHostTime dmvalue = new VariableHostTime(total_size, number_of_downloads, 
-            			number_of_successful_downloads, average_duration, number_of_users, 
-            			number_of_replica_downloads, 
-            			month, year, host_name, variable_code, variable_long_name, cf_standard_name);
-            	dmvalues.add(dmvalue);
-            	
+	        	Row row = new Row();
+	            ArrayList<Field> rowsArray = new ArrayList<Field>();
+	            
+	            Field total_size = new Field();
+	            total_size.setName("total_size");
+	            total_size.setValue(String.valueOf(rs.getLong("total_size")));
+	            rowsArray.add(total_size);
+	            
+	            Field number_of_downloads = new Field();
+	            number_of_downloads.setName("number_of_downloads");
+	            number_of_downloads.setValue(String.valueOf(rs.getLong("number_of_downloads")));
+	            rowsArray.add(number_of_downloads);
+	            
+	            Field number_of_successful_downloads = new Field();
+	            number_of_successful_downloads.setName("number_of_successful_downloads");
+	            number_of_successful_downloads.setValue(String.valueOf(rs.getLong("number_of_successful_downloads")));
+	            rowsArray.add(number_of_successful_downloads);
+	            
+                Field average_duration = new Field();
+                average_duration.setName("average_duration");
+                average_duration.setValue(String.valueOf(rs.getInt("average_duration")));     
+                rowsArray.add(average_duration);
+                
+                Field number_of_users = new Field();
+                number_of_users.setName("number_of_users");
+                number_of_users.setValue(String.valueOf(rs.getInt("number_of_users")));     
+                rowsArray.add(number_of_users);
+                
+                Field number_of_replica_downloads = new Field();
+                number_of_replica_downloads.setName("number_of_replica_downloads");
+                number_of_replica_downloads.setValue(String.valueOf(rs.getLong("number_of_replica_downloads")));     
+                rowsArray.add(number_of_replica_downloads);
+                
+                Field month = new Field();
+                month.setName("month");
+                month.setValue(String.valueOf(rs.getLong("month")));     
+                rowsArray.add(month);
+                
+                Field year = new Field();
+                year.setName("year");
+                year.setValue(String.valueOf(rs.getInt("year")));     
+                rowsArray.add(year);
+                
+                Field host_name = new Field();
+                host_name.setName("host_name");
+                host_name.setValue(String.valueOf(rs.getString("host_name")));     
+                rowsArray.add(host_name);
+                
+                Field variable_code = new Field();
+                variable_code.setName("variable_code");
+                variable_code.setValue(String.valueOf(rs.getString("variable_code")));     
+                rowsArray.add(variable_code);
+                
+                Field variable_long_name = new Field();
+                variable_long_name.setName("variable_long_name");
+                variable_long_name.setValue(String.valueOf(rs.getString("variable_long_name")));     
+                rowsArray.add(variable_long_name);
+                
+                Field cf_standard_name = new Field();
+                cf_standard_name.setName("cf_standard_name");
+                cf_standard_name.setValue(String.valueOf(rs.getString("cf_standard_name")));     
+                rowsArray.add(cf_standard_name);
+	            
+                row.setFieldList(rowsArray);                
+        	    rowList.add(row); 
+        	    
             }
             
             rs.close();
@@ -60,45 +111,95 @@ public class VariableHostTimeController {
 	    } finally {
 	            if(conn != null) conn.close();
 	    }
+	    
+	    Table<Row> listOfRows = new Table<Row> (rowList);
+	    listOfRows.setName("cmip5_dmart_variable_host_time");
+
+	    return listOfRows;
 		
-        List<VariableHostTime> result = dmvalues;
-		
-		return result;
 	}
 	
 	@Path("json")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<VariableHostTime> getXmlJson() throws SQLException {
+	public Table<Row> getJson() throws SQLException {
 		
-		List<VariableHostTime> dmvalues = new LinkedList<VariableHostTime>(); 
-		Connection conn = null;
-		
+	    List<Row> rowList = new ArrayList<Row>();
+	    Connection conn = null;
+	    
         try {
             conn = Constants.DATASOURCE.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SqlQuery.CMIP5_VARIABLE_HOST_TIME.getSql());
             ResultSet rs = stmt.executeQuery();
             
             while (rs.next()) {
-            	Long total_size = rs.getLong("month");
-            	Long number_of_downloads = rs.getLong("number_of_downloads");
-            	Long number_of_successful_downloads = rs.getLong("number_of_successful_downloads");
-            	Integer average_duration = rs.getInt("average_duration");
-            	Integer number_of_users = rs.getInt("number_of_users");
-            	Long number_of_replica_downloads = rs.getLong("number_of_replica_downloads");
-            	Integer month = rs.getInt("month");
-            	Integer year = rs.getInt("year");
-            	String host_name = rs.getString("host_name");
-            	String variable_code = rs.getString("variable_code");
-            	String variable_long_name = rs.getString("variable_long_name");
-            	String cf_standard_name = rs.getString("cf_standard_name");
             	
-            	VariableHostTime dmvalue = new VariableHostTime(total_size, number_of_downloads, 
-            			number_of_successful_downloads, average_duration, number_of_users, 
-            			number_of_replica_downloads, 
-            			month, year, host_name, variable_code, variable_long_name, cf_standard_name);
-            	dmvalues.add(dmvalue);
-            	
+	        	Row row = new Row();
+	            ArrayList<Field> rowsArray = new ArrayList<Field>();
+	            
+	            Field total_size = new Field();
+	            total_size.setName("total_size");
+	            total_size.setValue(String.valueOf(rs.getLong("total_size")));
+	            rowsArray.add(total_size);
+	            
+	            Field number_of_downloads = new Field();
+	            number_of_downloads.setName("number_of_downloads");
+	            number_of_downloads.setValue(String.valueOf(rs.getLong("number_of_downloads")));
+	            rowsArray.add(number_of_downloads);
+	            
+	            Field number_of_successful_downloads = new Field();
+	            number_of_successful_downloads.setName("number_of_successful_downloads");
+	            number_of_successful_downloads.setValue(String.valueOf(rs.getLong("number_of_successful_downloads")));
+	            rowsArray.add(number_of_successful_downloads);
+	            
+                Field average_duration = new Field();
+                average_duration.setName("average_duration");
+                average_duration.setValue(String.valueOf(rs.getInt("average_duration")));     
+                rowsArray.add(average_duration);
+                
+                Field number_of_users = new Field();
+                number_of_users.setName("number_of_users");
+                number_of_users.setValue(String.valueOf(rs.getInt("number_of_users")));     
+                rowsArray.add(number_of_users);
+                
+                Field number_of_replica_downloads = new Field();
+                number_of_replica_downloads.setName("number_of_replica_downloads");
+                number_of_replica_downloads.setValue(String.valueOf(rs.getLong("number_of_replica_downloads")));     
+                rowsArray.add(number_of_replica_downloads);
+                
+                Field month = new Field();
+                month.setName("month");
+                month.setValue(String.valueOf(rs.getLong("month")));     
+                rowsArray.add(month);
+                
+                Field year = new Field();
+                year.setName("year");
+                year.setValue(String.valueOf(rs.getInt("year")));     
+                rowsArray.add(year);
+                
+                Field host_name = new Field();
+                host_name.setName("host_name");
+                host_name.setValue(String.valueOf(rs.getString("host_name")));     
+                rowsArray.add(host_name);
+                
+                Field variable_code = new Field();
+                variable_code.setName("variable_code");
+                variable_code.setValue(String.valueOf(rs.getString("variable_code")));     
+                rowsArray.add(variable_code);
+                
+                Field variable_long_name = new Field();
+                variable_long_name.setName("variable_long_name");
+                variable_long_name.setValue(String.valueOf(rs.getString("variable_long_name")));     
+                rowsArray.add(variable_long_name);
+                
+                Field cf_standard_name = new Field();
+                cf_standard_name.setName("cf_standard_name");
+                cf_standard_name.setValue(String.valueOf(rs.getString("cf_standard_name")));     
+                rowsArray.add(cf_standard_name);
+	            
+                row.setFieldList(rowsArray);                
+        	    rowList.add(row); 
+        	    
             }
             
             rs.close();
@@ -108,10 +209,12 @@ public class VariableHostTimeController {
 	    } finally {
 	            if(conn != null) conn.close();
 	    }
+	    
+	    Table<Row> listOfRows = new Table<Row> (rowList);
+	    listOfRows.setName("cmip5_dmart_variable_host_time");
+
+	    return listOfRows;
 		
-        List<VariableHostTime> result = dmvalues;
-		
-		return result;
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.esg.node.rest.cmip5;
+package org.esg.node.utils;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;

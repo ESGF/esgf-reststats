@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -13,7 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.esg.node.utils.Constants;
+import org.esg.node.utils.Field;
+import org.esg.node.utils.Row;
 import org.esg.node.utils.SqlQuery;
+import org.esg.node.utils.Table;
 
 @Path("/cmpi5/host_time_geolocation")
 public class HostTimeGeolocationController {
@@ -21,95 +24,193 @@ public class HostTimeGeolocationController {
 	@Path("xml")
 	@GET
 	@Produces({MediaType.APPLICATION_XML})
-	public List<HostTimeGeolocation> getXml() throws SQLException {
+	public Table<Row> getXml() throws SQLException {
 		
-		List<HostTimeGeolocation> dmvalues = new LinkedList<HostTimeGeolocation>(); 
-		Connection conn = null;
-		
+	    List<Row> rowList = new ArrayList<Row>();
+	    Connection conn = null;
+	    
         try {
-                conn = Constants.DATASOURCE.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(SqlQuery.CMIP5_HOST_TIME_GEOLOCATION.getSql());
-                ResultSet rs = stmt.executeQuery();
+            conn = Constants.DATASOURCE.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SqlQuery.CMIP5_HOST_TIME_GEOLOCATION.getSql());
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+            	
+            	Row row = new Row();
+                ArrayList<Field> rowsArray = new ArrayList<Field>();
                 
-                while (rs.next()) {
-                	Long total_size = rs.getLong("month");
-                	Long number_of_downloads = rs.getLong("number_of_downloads");
-                	Long number_of_successful_downloads = rs.getLong("number_of_successful_downloads");
-                	Integer average_duration = rs.getInt("average_duration");
-                	Integer number_of_users = rs.getInt("number_of_users");
-                	Long number_of_replica_downloads = rs.getLong("number_of_replica_downloads");
-                	Integer month = rs.getInt("month");
-                	Integer year = rs.getInt("year");
-                	String host_name = rs.getString("host_name");
-                	Double latitude = rs.getDouble("latitude");
-                	Double longitude = rs.getDouble("longitude");
-
-                	HostTimeGeolocation dmvalue = new HostTimeGeolocation(total_size, number_of_downloads, 
-                			number_of_successful_downloads, average_duration, number_of_users, 
-                			number_of_replica_downloads, 
-                			host_name, month, year,latitude , longitude);
-                	dmvalues.add(dmvalue);
-                	
-                }
+                Field total_size = new Field();
+                total_size.setName("total_size");
+                total_size.setValue(String.valueOf(rs.getLong("total_size")));
+                rowsArray.add(total_size);
                 
-                rs.close();
-                stmt.close();
-        } catch(SQLException e) {
+                Field number_of_downloads = new Field();
+                number_of_downloads.setName("number_of_downloads");
+                number_of_downloads.setValue(String.valueOf(rs.getLong("number_of_downloads")));
+                rowsArray.add(number_of_downloads);
+                
+                Field number_of_successful_downloads = new Field();
+                number_of_successful_downloads.setName("number_of_successful_downloads");
+                number_of_successful_downloads.setValue(String.valueOf(rs.getLong("number_of_successful_downloads")));
+                rowsArray.add(number_of_successful_downloads);
+                
+                Field average_duration = new Field();
+                average_duration.setName("average_duration");
+                average_duration.setValue(String.valueOf(rs.getInt("average_duration")));     
+                rowsArray.add(average_duration);
+                
+                Field number_of_users = new Field();
+                number_of_users.setName("number_of_users");
+                number_of_users.setValue(String.valueOf(rs.getInt("number_of_users")));     
+                rowsArray.add(number_of_users);
+                
+                Field number_of_replica_downloads = new Field();
+                number_of_replica_downloads.setName("number_of_replica_downloads");
+                number_of_replica_downloads.setValue(String.valueOf(rs.getLong("number_of_replica_downloads")));     
+                rowsArray.add(number_of_replica_downloads);
+                
+                Field month = new Field();
+                month.setName("month");
+                month.setValue(String.valueOf(rs.getLong("month")));     
+                rowsArray.add(month);
+                
+                Field year = new Field();
+                year.setName("year");
+                year.setValue(String.valueOf(rs.getInt("year")));     
+                rowsArray.add(year);
+                
+                Field host_name = new Field();
+                host_name.setName("host_name");
+                host_name.setValue(String.valueOf(rs.getString("host_name")));     
+                rowsArray.add(host_name);
+                
+                Field latitude = new Field();
+                latitude.setName("latitude");
+                latitude.setValue(String.valueOf(rs.getDouble("latitude")));     
+                rowsArray.add(latitude);
+                
+                Field longitude = new Field();
+                longitude.setName("longitude");
+                longitude.setValue(String.valueOf(rs.getDouble("longitude")));     
+                rowsArray.add(longitude);
+                
+                row.setFieldList(rowsArray);                
+        	    rowList.add(row); 
+            }
+        
+		    rs.close();
+		    stmt.close();
+		} 
+        
+        catch(SQLException e) {
 				System.out.println(e.getMessage());
-        } finally {
-                if(conn != null) conn.close();
-        }
- 
-        List<HostTimeGeolocation> result = dmvalues;
+		} 
+        
+        finally {
+		        if(conn != null) conn.close();
+		}
+	    
+	    Table<Row> listOfRows = new Table<Row> (rowList);
+	    listOfRows.setName("cmip5_dmart_clients_host_time_geolocation");
+
+	    return listOfRows;
 		
-		return result;
 	}
 	
 	@Path("json")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<HostTimeGeolocation> getJson() throws SQLException {
+	public Table<Row> getJson() throws SQLException {
 		
-		List<HostTimeGeolocation> dmvalues = new LinkedList<HostTimeGeolocation>(); 
-		Connection conn = null;
-		
+	    List<Row> rowList = new ArrayList<Row>();
+	    Connection conn = null;
+	    
         try {
-                conn = Constants.DATASOURCE.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(SqlQuery.CMIP5_HOST_TIME_GEOLOCATION.getSql());
-                ResultSet rs = stmt.executeQuery();
+            conn = Constants.DATASOURCE.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SqlQuery.CMIP5_HOST_TIME_GEOLOCATION.getSql());
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+            	
+            	Row row = new Row();
+                ArrayList<Field> rowsArray = new ArrayList<Field>();
                 
-                while (rs.next()) {
-                	Long total_size = rs.getLong("month");
-                	Long number_of_downloads = rs.getLong("number_of_downloads");
-                	Long number_of_successful_downloads = rs.getLong("number_of_successful_downloads");
-                	Integer average_duration = rs.getInt("average_duration");
-                	Integer number_of_users = rs.getInt("number_of_users");
-                	Long number_of_replica_downloads = rs.getLong("number_of_replica_downloads");
-                	Integer month = rs.getInt("month");
-                	Integer year = rs.getInt("year");
-                	String host_name = rs.getString("host_name");
-                	Double latitude = rs.getDouble("latitude");
-                	Double longitude = rs.getDouble("longitude");
-
-                	HostTimeGeolocation du = new HostTimeGeolocation(total_size, number_of_downloads, 
-                			number_of_successful_downloads, average_duration, number_of_users, 
-                			number_of_replica_downloads, 
-                			host_name, month, year,latitude , longitude);
-                	dmvalues.add(du);
-                	
-                }
+                Field total_size = new Field();
+                total_size.setName("total_size");
+                total_size.setValue(String.valueOf(rs.getLong("total_size")));
+                rowsArray.add(total_size);
                 
-                rs.close();
-                stmt.close();
-        } catch(SQLException e) {
+                Field number_of_downloads = new Field();
+                number_of_downloads.setName("number_of_downloads");
+                number_of_downloads.setValue(String.valueOf(rs.getLong("number_of_downloads")));
+                rowsArray.add(number_of_downloads);
+                
+                Field number_of_successful_downloads = new Field();
+                number_of_successful_downloads.setName("number_of_successful_downloads");
+                number_of_successful_downloads.setValue(String.valueOf(rs.getLong("number_of_successful_downloads")));
+                rowsArray.add(number_of_successful_downloads);
+                
+                Field average_duration = new Field();
+                average_duration.setName("average_duration");
+                average_duration.setValue(String.valueOf(rs.getInt("average_duration")));     
+                rowsArray.add(average_duration);
+                
+                Field number_of_users = new Field();
+                number_of_users.setName("number_of_users");
+                number_of_users.setValue(String.valueOf(rs.getInt("number_of_users")));     
+                rowsArray.add(number_of_users);
+                
+                Field number_of_replica_downloads = new Field();
+                number_of_replica_downloads.setName("number_of_replica_downloads");
+                number_of_replica_downloads.setValue(String.valueOf(rs.getLong("number_of_replica_downloads")));     
+                rowsArray.add(number_of_replica_downloads);
+                
+                Field month = new Field();
+                month.setName("month");
+                month.setValue(String.valueOf(rs.getLong("month")));     
+                rowsArray.add(month);
+                
+                Field year = new Field();
+                year.setName("year");
+                year.setValue(String.valueOf(rs.getInt("year")));     
+                rowsArray.add(year);
+                
+                Field host_name = new Field();
+                host_name.setName("host_name");
+                host_name.setValue(String.valueOf(rs.getString("host_name")));     
+                rowsArray.add(host_name);
+                
+                Field latitude = new Field();
+                latitude.setName("latitude");
+                latitude.setValue(String.valueOf(rs.getDouble("latitude")));     
+                rowsArray.add(latitude);
+                
+                Field longitude = new Field();
+                longitude.setName("longitude");
+                longitude.setValue(String.valueOf(rs.getDouble("longitude")));     
+                rowsArray.add(longitude);
+                
+                row.setFieldList(rowsArray);                
+        	    rowList.add(row); 
+            }
+        
+		    rs.close();
+		    stmt.close();
+		} 
+        
+        catch(SQLException e) {
 				System.out.println(e.getMessage());
-        } finally {
-                if(conn != null) conn.close();
-        }
- 
-        List<HostTimeGeolocation> result = dmvalues;
+		} 
+        
+        finally {
+		        if(conn != null) conn.close();
+		}
+	    
+	    Table<Row> listOfRows = new Table<Row> (rowList);
+	    listOfRows.setName("cmip5_dmart_clients_host_time_geolocation");
+
+	    return listOfRows;
 		
-		return result;
 	}
 
 }

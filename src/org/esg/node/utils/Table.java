@@ -1,4 +1,4 @@
-package org.esg.node.rest.cmip5;
+package org.esg.node.utils;
 
 import java.util.ArrayList;
 import java.util.List;
