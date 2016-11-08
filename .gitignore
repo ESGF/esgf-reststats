@@ -11,3 +11,6 @@
 WebContent/WEB-INF/
 WebContent/META-INF/
 target/
+.classpath
+.project
+.settings/

@@ -32,7 +32,7 @@ public class DatasetHostTimeController {
             ResultSet rs = stmt.executeQuery();
             
             while (rs.next()) {
-            	Long total_size = rs.getLong("month");
+            	Long total_size = rs.getLong("total_size");
             	Long number_of_downloads = rs.getLong("number_of_downloads");
             	Long number_of_successful_downloads = rs.getLong("number_of_successful_downloads");
             	Integer average_duration = rs.getInt("average_duration");

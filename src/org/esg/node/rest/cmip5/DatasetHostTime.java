@@ -5,9 +5,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class DatasetHostTime {
 	
-	private Long  total_size;
-	private Long  number_of_downloads;
-	private Long  number_of_successful_downloads;
+	private Long dmart_key;
+	private Long total_size;
+	private Long number_of_downloads;
+	private Long number_of_successful_downloads;
 	private Integer average_duration;
 	private Integer number_of_users;
 	private Long  number_of_replica_downloads;
@@ -27,6 +28,7 @@ public class DatasetHostTime {
 			Integer average_duration, Integer number_of_users, Long number_of_replica_downloads,
 			Integer month, Integer year, String host_name, String dataset_name, Integer dataset_version, String datetime_start, String datetime_stop) {
 		super();
+		this.dmart_key = dmart_key;
 		this.total_size = total_size;
 		this.number_of_downloads = number_of_downloads;
 		this.number_of_successful_downloads = number_of_successful_downloads;
@@ -40,6 +42,14 @@ public class DatasetHostTime {
 		this.dataset_version = dataset_version;
 		this.datetime_start = datetime_start;
 		this.datetime_stop = datetime_stop;
+	}
+
+	public Long getDmart_key() {
+		return dmart_key;
+	}
+
+	public void setDmart_key(Long dmart_key) {
+		this.dmart_key = dmart_key;
 	}
 
 	public Long getTotal_size() {
