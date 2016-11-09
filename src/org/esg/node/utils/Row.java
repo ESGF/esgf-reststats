@@ -9,13 +9,13 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement(name = "row")
 @XmlSeeAlso({Field.class})
 public class Row {
-	private List fieldList;
+	private List<Field> fieldList;
 
 	@XmlElement(name="field")
-	public List getFieldList() {
+	public List<Field> getFieldList() {
 	    return fieldList;
 	}
-	public void setFieldList(List fieldList) {
+	public void setFieldList(List<Field> fieldList) {
 	    this.fieldList = fieldList;
 	}
 } 

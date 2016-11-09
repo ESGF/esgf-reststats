@@ -18,7 +18,7 @@ import org.esg.node.utils.Row;
 import org.esg.node.utils.SqlQuery;
 import org.esg.node.utils.Table;
 
-@Path("/cmpi5/host_time_geolocation")
+@Path("/cmip5/host_time_geolocation")
 public class HostTimeGeolocationController {
 	
 	@Path("xml")

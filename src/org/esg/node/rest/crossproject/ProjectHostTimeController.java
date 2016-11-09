@@ -4,17 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.json.JSONException;
 
 import org.esg.node.utils.Constants;
+import org.esg.node.utils.Field;
+import org.esg.node.utils.Row;
 import org.esg.node.utils.SqlQuery;
+import org.esg.node.utils.Table;
 
 @Path("/crossproject/projecttime")
 public class ProjectHostTimeController {
@@ -22,9 +24,9 @@ public class ProjectHostTimeController {
 	@Path("xml")
 	@GET
 	@Produces({MediaType.APPLICATION_XML})
-	public List<ProjectHostTime> getAlldatausage() throws SQLException {
+	public Table<Row> getXml() throws SQLException {
 		
-		List<ProjectHostTime> dmvalues = new LinkedList<ProjectHostTime>(); 
+		List<Row> rowList = new ArrayList<Row>(); 
 		Connection conn = null;
 		
         try {
@@ -33,20 +35,63 @@ public class ProjectHostTimeController {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-            	Long total_size                     = rs.getLong("total_size");
-            	Long number_of_downloads            = rs.getLong("number_of_downloads");
-            	Long number_of_successful_downloads = rs.getLong("number_of_successful_downloads");
-            	Long number_of_replica_downloads    = rs.getLong("number_of_replica_downloads");
-            	Integer average_duration            = rs.getInt("average_duration");
-            	Integer number_of_users             = rs.getInt("number_of_users");
-            	String host_name                    = rs.getString("host_name");
-            	String project_name                 = rs.getString("project_name");
-            	Integer month                       = rs.getInt("month");
-            	Integer year                        = rs.getInt("year");
             	
-            	ProjectHostTime pht = new ProjectHostTime(total_size, number_of_downloads, number_of_successful_downloads, number_of_replica_downloads,
-            			average_duration, number_of_users, host_name, project_name, month, year);
-            	dmvalues.add(pht);
+            	Row row = new Row();
+                ArrayList<Field> rowsArray = new ArrayList<Field>();
+                
+                Field total_size = new Field();
+                total_size.setName("total_size");
+                total_size.setValue(String.valueOf(rs.getLong("total_size")));
+                rowsArray.add(total_size);
+                
+                Field number_of_downloads = new Field();
+                number_of_downloads.setName("number_of_downloads");
+                number_of_downloads.setValue(String.valueOf(rs.getLong("number_of_downloads")));
+                rowsArray.add(number_of_downloads);
+                
+                Field number_of_successful_downloads = new Field();
+                number_of_successful_downloads.setName("number_of_successful_downloads");
+                number_of_successful_downloads.setValue(String.valueOf(rs.getLong("number_of_successful_downloads")));
+                rowsArray.add(number_of_successful_downloads);
+                
+                Field number_of_replica_downloads = new Field();
+                number_of_replica_downloads.setName("number_of_replica_downloads");
+                number_of_replica_downloads.setValue(String.valueOf(rs.getLong("number_of_replica_downloads")));
+                rowsArray.add(number_of_replica_downloads);
+                                
+                Field average_duration = new Field();
+                average_duration.setName("average_duration");
+                average_duration.setValue(String.valueOf(rs.getInt("average_duration")));     
+                rowsArray.add(average_duration);
+                
+                Field number_of_users = new Field();
+                number_of_users.setName("number_of_users");
+                number_of_users.setValue(String.valueOf(rs.getInt("number_of_users")));     
+                rowsArray.add(number_of_users);
+                
+                Field host_name = new Field();
+                host_name.setName("host_name");
+                host_name.setValue(String.valueOf(rs.getString("host_name")));     
+                rowsArray.add(host_name);
+                
+                Field project_name = new Field();
+                project_name.setName("project_name");
+                project_name.setValue(String.valueOf(rs.getString("project_name")));     
+                rowsArray.add(project_name);
+                
+                Field month = new Field();
+                month.setName("month");
+                month.setValue(String.valueOf(rs.getInt("month")));     
+                rowsArray.add(month);
+                
+                Field year = new Field();
+                year.setName("year");
+                year.setValue(String.valueOf(rs.getInt("year")));     
+                rowsArray.add(year);
+                
+                row.setFieldList(rowsArray);
+                
+        	    rowList.add(row);
             }
             
             rs.close();
@@ -57,39 +102,83 @@ public class ProjectHostTimeController {
                 if(conn != null) conn.close();
         }
  
-        List<ProjectHostTime> result = dmvalues;
-		
-		return result;
+        Table<Row> listOfRows = new Table<Row> (rowList);
+	    listOfRows.setName("cross_dmart_project_host_time");
+
+	    return listOfRows;
 	}
 	
 	@Path("json")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<ProjectHostTime> getAllDataUsageJson() throws JSONException, SQLException {
+	public Table<Row> getJson() throws SQLException {
 		
-		List<ProjectHostTime> dmvalues = new LinkedList<ProjectHostTime>(); 
+		List<Row> rowList = new ArrayList<Row>(); 
 		Connection conn = null;
 		
         try {
-        	conn = Constants.DATASOURCE.getConnection();
+            conn = Constants.DATASOURCE.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SqlQuery.CROSS_DMART_PROJECT_HOST_TIME.getSql());
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-            	Long total_size                     = rs.getLong("total_size");
-            	Long number_of_downloads            = rs.getLong("number_of_downloads");
-            	Long number_of_successful_downloads = rs.getLong("number_of_successful_downloads");
-            	Long number_of_replica_downloads    = rs.getLong("number_of_replica_downloads");
-            	Integer average_duration            = rs.getInt("average_duration");
-            	Integer number_of_users             = rs.getInt("number_of_users");
-            	String host_name                    = rs.getString("host_name");
-            	String project_name                 = rs.getString("project_name");
-            	Integer month                       = rs.getInt("month");
-            	Integer year                        = rs.getInt("year");
             	
-            	ProjectHostTime pht = new ProjectHostTime(total_size, number_of_downloads, number_of_successful_downloads, number_of_replica_downloads,
-            			average_duration, number_of_users, host_name, project_name, month, year);
-            	dmvalues.add(pht);
+            	Row row = new Row();
+                ArrayList<Field> rowsArray = new ArrayList<Field>();
+                
+                Field total_size = new Field();
+                total_size.setName("total_size");
+                total_size.setValue(String.valueOf(rs.getLong("total_size")));
+                rowsArray.add(total_size);
+                
+                Field number_of_downloads = new Field();
+                number_of_downloads.setName("number_of_downloads");
+                number_of_downloads.setValue(String.valueOf(rs.getLong("number_of_downloads")));
+                rowsArray.add(number_of_downloads);
+                
+                Field number_of_successful_downloads = new Field();
+                number_of_successful_downloads.setName("number_of_successful_downloads");
+                number_of_successful_downloads.setValue(String.valueOf(rs.getLong("number_of_successful_downloads")));
+                rowsArray.add(number_of_successful_downloads);
+                
+                Field number_of_replica_downloads = new Field();
+                number_of_replica_downloads.setName("number_of_replica_downloads");
+                number_of_replica_downloads.setValue(String.valueOf(rs.getLong("number_of_replica_downloads")));
+                rowsArray.add(number_of_replica_downloads);
+                                
+                Field average_duration = new Field();
+                average_duration.setName("average_duration");
+                average_duration.setValue(String.valueOf(rs.getInt("average_duration")));     
+                rowsArray.add(average_duration);
+                
+                Field number_of_users = new Field();
+                number_of_users.setName("number_of_users");
+                number_of_users.setValue(String.valueOf(rs.getInt("number_of_users")));     
+                rowsArray.add(number_of_users);
+                
+                Field host_name = new Field();
+                host_name.setName("host_name");
+                host_name.setValue(String.valueOf(rs.getString("host_name")));     
+                rowsArray.add(host_name);
+                
+                Field project_name = new Field();
+                project_name.setName("project_name");
+                project_name.setValue(String.valueOf(rs.getString("project_name")));     
+                rowsArray.add(project_name);
+                
+                Field month = new Field();
+                month.setName("month");
+                month.setValue(String.valueOf(rs.getInt("month")));     
+                rowsArray.add(month);
+                
+                Field year = new Field();
+                year.setName("year");
+                year.setValue(String.valueOf(rs.getInt("year")));     
+                rowsArray.add(year);
+                
+                row.setFieldList(rowsArray);
+                
+        	    rowList.add(row);
             }
             
             rs.close();
@@ -100,8 +189,9 @@ public class ProjectHostTimeController {
                 if(conn != null) conn.close();
         }
  
-        List<ProjectHostTime> result = dmvalues;
-		
-		return result;
+        Table<Row> listOfRows = new Table<Row> (rowList);
+	    listOfRows.setName("cross_dmart_project_host_time");
+
+	    return listOfRows;
 	}
 }
