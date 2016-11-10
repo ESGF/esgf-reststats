@@ -18,7 +18,7 @@ import org.esg.node.utils.Row;
 import org.esg.node.utils.SqlQuery;
 import org.esg.node.utils.Table;
 
-@Path("/cmip5/experiment_host_time")
+@Path("/cmip5/experiment")
 public class ExperimentHostTimeController {
 	
 	@Path("/xml")
