@@ -8,9 +8,9 @@
 *.egg
 *#*
 *.md5
-WebContent/WEB-INF/
-WebContent/META-INF/
-target/
+war/WEB-INF/lib/
+lib/
+dist/
 .classpath
 .project
 .settings/
