@@ -14,18 +14,6 @@
 	<property name="lib.dir" value="lib" />
 	<property name="ivy_retrieve_type" value="jar, bundle"/>
 	
-	<!--
-	      ************************************************************
-	      Initialization and Preparation....
-	      ************************************************************
-	-->
-	  
-	 <target name="pre-init" unless="build.master">
-	    <property name="build.compiler" value="javac${jdk.version}" /> 
-	    <property name="build.compiler.emacs" value="true" /> 
-	    <echo message="set build.compiler to ${build.compiler}"/>
-	 </target>
-
 	<!-- ivy start -->
 	<target name="resolve" depends="init" description="retrieve dependencies with ivy">
 		<echo message="Getting dependencies..." />
