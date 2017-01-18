@@ -14,3 +14,4 @@ dist/
 .classpath
 .project
 .settings/
+war/WEB-INF/classes/
