@@ -11,6 +11,7 @@ public enum SqlQuery {
     /** cross project **/
     CROSS_DMART_PROJECT_HOST_TIME("SELECT * FROM esgf_dashboard.cross_dmart_project_host_time;"),
     CROSS_DMART_PROJECT_HOST_GEOLOCATION("SELECT * FROM esgf_dashboard.cross_dmart_project_host_geolocation;"),
+    CROSS_DMART_COARSE_STATS("SELECT * from esgf_dashboard.cross_dmart_coarse_stats"),
     /** cross project **/
     
     /** obs4mips **/
@@ -26,11 +27,11 @@ public enum SqlQuery {
     CMIP5_MODEL_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_model_host_time"),
     CMIP5_EXPERIMENT_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_experiment_host_time"),
     CMIP5_VARIABLE_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_variable_host_time"),
-    CMIP5_DATASET_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_dataset_host_time"),
+    CMIP5_DATASET_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_dataset_host_time");
     /** cmip5 **/
 	
 	/** is-enes stats **/
-    CROSS_DMART_ISENES_STATS("SELECT * from esgf_dashboard.cross_dmart_isenes_stats");
+//    CROSS_DMART_COARSE_STATS("SELECT * from esgf_dashboard.cross_dmart_isenes_stats");
     /** is-enes stats **/
 
 	

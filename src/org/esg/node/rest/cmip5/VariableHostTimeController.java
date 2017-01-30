@@ -18,7 +18,7 @@ import org.esg.node.utils.Row;
 import org.esg.node.utils.SqlQuery;
 import org.esg.node.utils.Table;
 
-@Path("/cmip5/variable")
+@Path("/cmip5/stats-by-variable")
 public class VariableHostTimeController {
 	
 	@Path("xml")

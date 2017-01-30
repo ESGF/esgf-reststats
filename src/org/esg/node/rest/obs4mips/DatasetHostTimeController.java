@@ -18,7 +18,7 @@ import org.esg.node.utils.Row;
 import org.esg.node.utils.SqlQuery;
 import org.esg.node.utils.Table;
 
-@Path("/obs4mips/dataset")
+@Path("/obs4mips/stats-by-dataset")
 public class DatasetHostTimeController {
 	
 	@Path("xml")

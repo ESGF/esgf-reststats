@@ -18,7 +18,7 @@ import org.esg.node.utils.Row;
 import org.esg.node.utils.SqlQuery;
 import org.esg.node.utils.Table;
 
-@Path("/cmip5/dataset")
+@Path("/cmip5/stats-by-dataset")
 public class DatasetHostTimeController {
 	
 	@Path("/xml")

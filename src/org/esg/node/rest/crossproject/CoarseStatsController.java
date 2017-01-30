@@ -1,4 +1,4 @@
-package org.esg.node.isenesstats;
+package org.esg.node.rest.crossproject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,8 +18,8 @@ import org.esg.node.utils.Row;
 import org.esg.node.utils.SqlQuery;
 import org.esg.node.utils.Table;
 
-@Path("/isenes/stats")
-public class EuNotEuStatsController {
+@Path("/cross-project/coarse-stats")
+public class CoarseStatsController {
 	
 	@Path("/xml")
 	@GET
@@ -31,7 +31,7 @@ public class EuNotEuStatsController {
 	    
         try {
             conn = Constants.DATASOURCE.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(SqlQuery.CROSS_DMART_ISENES_STATS.getSql());
+            PreparedStatement stmt = conn.prepareStatement(SqlQuery.CROSS_DMART_COARSE_STATS.getSql());
             ResultSet rs = stmt.executeQuery();
             
             while (rs.next()) {
@@ -103,7 +103,7 @@ public class EuNotEuStatsController {
 	    
         try {
             conn = Constants.DATASOURCE.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(SqlQuery.CROSS_DMART_ISENES_STATS.getSql());
+            PreparedStatement stmt = conn.prepareStatement(SqlQuery.CROSS_DMART_COARSE_STATS.getSql());
             ResultSet rs = stmt.executeQuery();
             
             while (rs.next()) {
