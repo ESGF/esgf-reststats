@@ -1,8 +1,8 @@
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="esgf-stats-api" default="main" basedir=".">
-	<description>
-		Create a Spring MVC (WAR) with Ant build script
-	</description>
-
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="esgf-stats-api" default="make_dist" basedir=".">
+	
+	<property name="module" value="esgf-stats-api"/>
+	<property name="organization" value="Earth Systems Grid Federation"/>
+	
 	<!-- Project Structure -->
 	<property name="jdk.version" value="1.8" />
 	<property name="projectName" value="WebProject" />
@@ -13,6 +13,14 @@
 	<property name="dist.temp.dir" location="dist/temp" />
 	<property name="lib.dir" value="lib" />
 	<property name="ivy_retrieve_type" value="jar, bundle"/>
+	
+	<!-- Create folders -->
+	<target name="init">
+		<mkdir dir="${src.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${web.classes.dir}" />
+		<mkdir dir="${lib.dir}" />
+	</target>
 	
 	<!-- ivy start -->
 	<target name="resolve" depends="init" description="retrieve dependencies with ivy">
@@ -42,7 +50,7 @@
 	</target>
 
 	<!-- Create the final WAR file for deployment -->
-	<target name="package" depends="clean, compile" description="create a war file">
+	<target name="make_dist" depends="clean_all, compile" description="create a war file">
 		<!-- ivy get dependencies and put it in ${lib.dir} -->		
 		<ivy:resolve type="${ivy_retrieve_type}"/>
 		<ivy:retrieve sync="true"/>
@@ -53,20 +61,16 @@
 		</war>
 	</target>
 
-	<!-- Create folders -->
-	<target name="init">
-		<mkdir dir="${src.dir}" />
-		<mkdir dir="${dist.dir}" />
-		<mkdir dir="${web.classes.dir}" />
-		<mkdir dir="${lib.dir}" />
-	</target>
 
 	<!-- Delete folders -->
-	<target name="clean" description="clean up">
+	<target name="clean" description="(Cleans out classfiles from build dir)">
+		<echo message="Removing build directory"/>
 		<delete dir="${web.classes.dir}" />
-		<delete dir="${dist.dir}" />
 	</target>
-
-	<target name="main" depends="package" />
-
+	
+	<target name="clean_all" depends="clean" description="(Cleans out the distribution directory)">
+    	<echo message="Cleaning out distribution directory"/>
+    	<delete dir="${dist_dir}"/>
+ 	 </target>
+	
 </project>
