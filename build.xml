@@ -3,29 +3,72 @@
 	<property name="module" value="esgf-stats-api"/>
 	<property name="organization" value="Earth Systems Grid Federation"/>
 	
+	<property name="java.version.val" value="1.8"/>
+	
 	<!-- Project Structure -->
-	<property name="jdk.version" value="1.8" />
-	<property name="projectName" value="WebProject" />
-	<property name="src.dir" location="src" />
-	<property name="web.dir" value="war" />
-	<property name="web.classes.dir" location="${web.dir}/WEB-INF/classes" />
-	<property name="dist.dir" location="dist" />
+	<property name="src_dir" location="src" />
+	<property name="web_dir" location="war" />
+	<property name="web_classes_dir" location="${web_dir}/WEB-INF/classes" />
+	<property name="dist_dir" location="dist" />
 	<property name="dist.temp.dir" location="dist/temp" />
-	<property name="lib.dir" value="lib" />
+	<property name="lib_dir" location="lib" />
+	<property name="lib_fetched_dir"  value="${basedir}/lib/fetched"/>
 	<property name="ivy_retrieve_type" value="jar, bundle"/>
 	
 	<!-- Create folders -->
-	<target name="init">
-		<mkdir dir="${src.dir}" />
-		<mkdir dir="${dist.dir}" />
-		<mkdir dir="${web.classes.dir}" />
-		<mkdir dir="${lib.dir}" />
+	<target name="-pre-init" unless="build.master">
+	    <property name="build.compiler" value="javac${java.version.val}" />
+	    <property name="build.compiler.emacs" value="true" />
+	    <echo message="set build.compiler to ${build.compiler}"/>
 	</target>
 	
-	<!-- ivy start -->
-	<target name="resolve" depends="init" description="retrieve dependencies with ivy">
+	<target name="init-ivy" depends="init">
+   		<property name="ivy_version" value="2.3.0" />
+    	<taskdef resource="org/apache/ivy/ant/antlib.xml"
+             uri="antlib:org.apache.ivy.ant" classpath="${lib_dir}/ivy-${ivy_version}.jar"/>
+    	<ivy:settings file="./ivysettings.xml">
+      		<credentials host="esgf.org" realm="Artifactory Realm" username="${username}" passwd="${passwd}" />
+    	</ivy:settings>
+  	</target>
+
+	
+	<target name="init" depends="-pre-init" unless="build.master" description="(View the properties defined in this file)">
+		<echo message="Initializing build environment..."/>
+		<echo message="Using Java Version ${java.version.val}"/>
+		
+		<echo message="--------------------------------"/>
+		<echo message="module            = ${module} "/>
+		<echo message="src_dir           = ${src_dir}"/>
+		<echo message="web_dir           = ${web_dir}"/>
+		<echo message="web_classes_dir   = ${web_classes_dir}"/>
+		<echo message="dist_dir          = ${dist_dir}"/>
+		<echo message="lib_dir           = ${lib_dir}"/>
+		<echo message="lib_fetched_dir   = ${lib_fetched_dir}"/>
+		<echo message="--------------------------------"/>
+		<tstamp/>
+		
+		<mkdir dir="${src_dir}" />
+		<mkdir dir="${dist_dir}" />
+		<mkdir dir="${web_classes_dir}" />
+		<mkdir dir="${lib_fetched_dir}" />
+	</target>
+	
+	<!-- ivy get dependencies and put it in ${lib_fetched_dir} -->
+	<target name="resolve" depends="init-ivy" description="retrieve dependencies with ivy">
 		<echo message="Getting dependencies..." />
-		<ivy:retrieve />
+		<ivy:resolve type="${ivy_retrieve_type}"/>
+		<ivy:retrieve pattern="${lib_fetched_dir}/[artifact]-[revision].[ext]"/>
+		
+		<path id="main_classpath">
+	      <fileset dir="${lib_fetched_dir}">
+	            <include name="**/*.jar"/>
+	            <exclude name="**/junit*.jar"/>
+	            <exclude name="**/*javadoc.jar"/>
+	            <exclude name="**/*sources.jar"/>
+	      </fileset>
+	      <pathelement path="${web_classes_dir}"/>
+	    </path>
+
 
 		<ivy:cachepath pathid="compile.path" conf="compile" />
 		<ivy:cachepath pathid="runtime.path" conf="runtime" />
@@ -40,35 +83,40 @@
 	</target>
 	<!-- ivy end -->
 
-	<!-- Compile Java source from ${src.dir} and output it to ${web.classes.dir} -->
+	<!-- Compile Java source from ${src_dir} and output it to ${web_classes_dir} -->
 	<target name="compile" depends="resolve" description="compile source code">
-		<mkdir dir="${web.classes.dir}" />
-		<javac destdir="${web.classes.dir}" source="${jdk.version}" target="${jdk.version}" 
+		<mkdir dir="${web_classes_dir}" />
+		<javac destdir="${web_classes_dir}" source="${java.version.val}" target="${java.version.val}" 
 			debug="true" includeantruntime="false" classpathref="compile.path">
-			<src path="${src.dir}" />
+			<src path="${src_dir}" />
 		</javac>
 	</target>
 
 	<!-- Create the final WAR file for deployment -->
-	<target name="make_dist" depends="clean_all, compile" description="create a war file">
-		<!-- ivy get dependencies and put it in ${lib.dir} -->		
-		<ivy:resolve type="${ivy_retrieve_type}"/>
-		<ivy:retrieve sync="true"/>
-
-		<war destfile="${dist.dir}/esgf-stats-api.war" webxml="${web.dir}/WEB-INF/web.xml">			
-			<webinf dir="${web.dir}/WEB-INF" />
-			<lib dir="${lib.dir}" />
+	<target name="make_dist" depends="compile" description="create a war file">
+		<war destfile="${dist_dir}/esgf-stats-api.war" webxml="${web_dir}/WEB-INF/web.xml">			
+			<webinf dir="${web_dir}/WEB-INF" />
+			<lib dir="${lib_dir}" />
 		</war>
 	</target>
 
 
 	<!-- Delete folders -->
-	<target name="clean" description="(Cleans out classfiles from build dir)">
+	<target name="clean" depends="init" description="(Cleans out classfiles from build dir)">
 		<echo message="Removing build directory"/>
-		<delete dir="${web.classes.dir}" />
+		<delete dir="${web_classes_dir}" />
 	</target>
 	
-	<target name="clean_all" depends="clean" description="(Cleans out the distribution directory)">
+	<target name="dep_clean_libs" depends="init" description="(Cleans out [removes] local workspace jars fetched by Ivy)">
+	    <echo message="Removing local jars fetched by Ivy"/>
+	    <delete dir="${lib_fetched_dir}"/>
+	  </target>
+	
+	<target name="dep_clean_cache" depends="init,init-ivy" description="(Cleans the Ivy cache)">
+	    <ivy:cleancache />
+	 </target>
+	
+	<target name="clean_all" depends="clean, dep_clean_libs, dep_clean_cache" description="(Cleans out the distribution directory)">
     	<echo message="Cleaning out distribution directory"/>
     	<delete dir="${dist_dir}"/>
  	 </target>
