@@ -2,11 +2,17 @@ package org.esg.node.utils;
 
 public enum SqlQuery {
 	
+	/** historical **/
     CMIP5_DATA_USAGE("SELECT * FROM esgf_dashboard.cmip5_data_usage"),
     CORDEX_DATA_USAGE("SELECT * FROM esgf_dashboard.cordex_data_usage"),
-    OBS4MIPS_DATA_USAGE("SELECT * FROM esgf_dashboard.obs_data_usage"),
+    OBS4MIPS_DATA_USAGE("SELECT * FROM esgf_dashboard.obs4mips_data_usage"),
     ALL_DATA_USAGE("SELECT * FROM esgf_dashboard.all_data_usage"),
-    CLIENT_STATS_DM("SELECT * FROM esgf_dashboard.client_stats_dm"),
+    
+    CMIP5_DATA_USAGE_CONTINENT("SELECT * FROM esgf_dashboard.cmip5_data_usage_continent"),
+    CORDEX_DATA_USAGE_CONTINENT("SELECT * FROM esgf_dashboard.cordex_data_usage_continent"),
+    OBS4MIPS_DATA_USAGE_CONTINENT("SELECT * FROM esgf_dashboard.obs4mips_data_usage_continent"),
+    ALL_DATA_USAGE_CONTINENT("SELECT * FROM esgf_dashboard.all_data_usage_continent"),
+    /** historical **/
     
     /** cross project **/
     CROSS_DMART_PROJECT_HOST_TIME("SELECT * FROM esgf_dashboard.cross_dmart_project_host_time;"),
