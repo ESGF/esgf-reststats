@@ -9,7 +9,7 @@
 *#*
 *.md5
 war/WEB-INF/lib/
-lib/fetched/
+lib/
 dist/
 .classpath
 .project

@@ -6,13 +6,13 @@
 	<property name="java.version.val" value="1.8"/>
 	
 	<!-- Project Structure -->
-	<property name="src_dir" location="src" />
-	<property name="web_dir" location="war" />
-	<property name="web_classes_dir" location="${web_dir}/WEB-INF/classes" />
-	<property name="dist_dir" location="dist" />
-	<property name="dist.temp.dir" location="dist/temp" />
-	<property name="lib_dir" location="lib" />
-	<property name="lib_fetched_dir"  value="${basedir}/lib/fetched"/>
+	<property name="src_dir"           location="src" />
+	<property name="web_dir"           location="war" />
+	<property name="web_classes_dir"   location="${web_dir}/WEB-INF/classes" />
+	<property name="dist_dir"          location="dist" />
+	<property name="dist.temp.dir"     location="dist/temp" />
+	<property name="support_lib_dir"   location="supportlib" />
+	<property name="lib_dir"           location="${basedir}/lib"/>
 	<property name="ivy_retrieve_type" value="jar, bundle"/>
 	
 	<!-- Create folders -->
@@ -25,7 +25,7 @@
 	<target name="init-ivy" depends="init">
    		<property name="ivy_version" value="2.3.0" />
     	<taskdef resource="org/apache/ivy/ant/antlib.xml"
-             uri="antlib:org.apache.ivy.ant" classpath="${lib_dir}/ivy-${ivy_version}.jar"/>
+             uri="antlib:org.apache.ivy.ant" classpath="${support_lib_dir}/ivy-${ivy_version}.jar"/>
     	<ivy:settings file="./ivysettings.xml">
       		<credentials host="esgf.org" realm="Artifactory Realm" username="${username}" passwd="${passwd}" />
     	</ivy:settings>
@@ -42,25 +42,25 @@
 		<echo message="web_dir           = ${web_dir}"/>
 		<echo message="web_classes_dir   = ${web_classes_dir}"/>
 		<echo message="dist_dir          = ${dist_dir}"/>
+		<echo message="support_lib_dir   = ${support_lib_dir}"/>
 		<echo message="lib_dir           = ${lib_dir}"/>
-		<echo message="lib_fetched_dir   = ${lib_fetched_dir}"/>
 		<echo message="--------------------------------"/>
 		<tstamp/>
 		
 		<mkdir dir="${src_dir}" />
 		<mkdir dir="${dist_dir}" />
 		<mkdir dir="${web_classes_dir}" />
-		<mkdir dir="${lib_fetched_dir}" />
+		<mkdir dir="${lib_dir}" />
 	</target>
 	
-	<!-- ivy get dependencies and put it in ${lib_fetched_dir} -->
+	<!-- ivy get dependencies and put it in ${lib_dir} -->
 	<target name="resolve" depends="init-ivy" description="retrieve dependencies with ivy">
 		<echo message="Getting dependencies..." />
 		<ivy:resolve type="${ivy_retrieve_type}"/>
-		<ivy:retrieve pattern="${lib_fetched_dir}/[artifact]-[revision].[ext]"/>
+		<ivy:retrieve pattern="${lib_dir}/[artifact]-[revision].[ext]"/>
 		
 		<path id="main_classpath">
-	      <fileset dir="${lib_fetched_dir}">
+	      <fileset dir="${lib_dir}">
 	            <include name="**/*.jar"/>
 	            <exclude name="**/junit*.jar"/>
 	            <exclude name="**/*javadoc.jar"/>
@@ -109,7 +109,7 @@
 	
 	<target name="dep_clean_libs" depends="init" description="(Cleans out [removes] local workspace jars fetched by Ivy)">
 	    <echo message="Removing local jars fetched by Ivy"/>
-	    <delete dir="${lib_fetched_dir}"/>
+	    <delete dir="${lib_dir}"/>
 	  </target>
 	
 	<target name="dep_clean_cache" depends="init,init-ivy" description="(Cleans the Ivy cache)">
