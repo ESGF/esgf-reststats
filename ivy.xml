@@ -8,7 +8,6 @@
     </configurations>
     
 	<dependencies>
-		<!--<dependency org="asm" name="asm" rev="3.3.1" transitive="false"/>-->
 	  	<dependency org="org.ow2.asm" name="asm" rev="5.2" transitive="false"/>
 		<dependency org="com.sun.jersey" name="jersey-bundle" rev="1.19.3" transitive="false"/>
 	  	<dependency org="com.sun.jersey" name="jersey-server" rev="1.19.3" transitive="false"/>
