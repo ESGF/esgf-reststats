@@ -219,9 +219,64 @@ public class CoarseStatsController {
                 
         	    rowList.add(row);       	    
             }
-            
             rs.close();
             stmt.close();
+            
+            PreparedStatement stmt2 = conn.prepareStatement(SqlQuery.COARSE_STATS_NOT_EUROPE.getSql());
+            ResultSet rs2 = stmt2.executeQuery();
+            
+            while (rs2.next()) {
+            	
+            	Row row = new Row();
+                ArrayList<Field> rowsArray = new ArrayList<Field>();
+                
+                Field total_size = new Field();
+                total_size.setName("total_size");
+                total_size.setValue(String.valueOf(rs2.getLong("gb")));
+                rowsArray.add(total_size);
+                
+                Field number_of_downloads = new Field();
+                number_of_downloads.setName("number_of_downloads");
+                number_of_downloads.setValue(String.valueOf(rs2.getLong("downloads")));
+                rowsArray.add(number_of_downloads);
+                
+                Field number_of_distinct_file = new Field();
+                number_of_distinct_file.setName("number_of_distinct_file");
+                number_of_distinct_file.setValue(String.valueOf(rs2.getLong("files")));
+                rowsArray.add(number_of_distinct_file);
+                
+                Field number_of_users = new Field();
+                number_of_users.setName("number_of_users");
+                number_of_users.setValue(String.valueOf(rs2.getInt("users")));     
+                rowsArray.add(number_of_users);
+                
+                Field month = new Field();
+                month.setName("month");
+                month.setValue(String.valueOf(rs2.getLong("month")));     
+                rowsArray.add(month);
+                
+                Field year = new Field();
+                year.setName("year");
+                year.setValue(String.valueOf(rs2.getInt("year")));     
+                rowsArray.add(year);
+                
+                Field eu_stats = new Field();
+                eu_stats.setName("eu");
+                eu_stats.setValue("not-eu");
+                rowsArray.add(eu_stats);
+                
+                Field host_name = new Field();
+                host_name.setName("host_name");
+                host_name.setValue(String.valueOf(rs2.getString("host")));     
+                rowsArray.add(host_name);
+                
+                row.setFieldList(rowsArray);
+                
+        	    rowList.add(row);       	    
+            }
+            rs2.close();
+            stmt2.close();
+            
 	    } catch(SQLException e) {
 				System.out.println(e.getMessage());
 	    } finally {
@@ -233,5 +288,4 @@ public class CoarseStatsController {
 
 	    return listOfRows;
 	}
-
 }
