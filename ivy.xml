@@ -14,9 +14,9 @@
 	  	<dependency org="com.sun.jersey" name="jersey-core" rev="1.19.4" transitive="false"/>
 		<dependency org="postgresql" name="postgresql" rev="9.1-901-1.jdbc4" transitive="false"/>
 	  	<dependency org="commons-logging" name="commons-logging" rev="1.2" transitive="false"/>
-	  	<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.9.0" transitive="false"/>
-	  	<dependency org="org.springframework" name="spring-web" rev="4.3.10.RELEASE" transitive="false"/>
-	  	<dependency org="org.springframework" name="spring-webmvc" rev="4.3.10.RELEASE" transitive="false"/>
+	  	<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.9.1" transitive="false"/>
+	  	<dependency org="org.springframework" name="spring-web" rev="4.3.11.RELEASE" transitive="false"/>
+	  	<dependency org="org.springframework" name="spring-webmvc" rev="4.3.11.RELEASE" transitive="false"/>
 	  	
 	    <dependency org="org.esgf" name="esgf-node-manager" rev="latest.milestone" transitive="false"/>
 
