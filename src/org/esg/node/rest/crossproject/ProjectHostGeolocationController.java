@@ -89,6 +89,11 @@ public class ProjectHostGeolocationController {
                 longitude.setValue(String.valueOf(rs.getDouble("longitude")));     
                 rowsArray.add(longitude);
                 
+                Field country_id = new Field();
+                country_id.setName("country_id");
+                country_id.setValue(String.valueOf(rs.getInt("country_id")));     
+                rowsArray.add(country_id);
+                
                 row.setFieldList(rowsArray);
                 
         	    rowList.add(row);
