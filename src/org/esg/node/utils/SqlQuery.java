@@ -32,15 +32,23 @@ public enum SqlQuery {
     OBS_DMART_SOURCE_HOST_TIME("SELECT * FROM esgf_dashboard.obs4mips_dmart_source_host_time;"),
     OBS_DMART_REALM_HOST_TIME("SELECT * FROM esgf_dashboard.obs4mips_dmart_realm_host_time;"),
     OBS_DMART_DATASET_HOST_TIME("SELECT * FROM esgf_dashboard.obs4mips_dmart_dataset_host_time;"),
-	/** obs4mips **/
+    /** obs4mips **/
 
     /** cmip5 **/
     CMIP5_CLIENTS_HOST_GEOLOCATION("SELECT * FROM esgf_dashboard.cmip5_dmart_clients_host_geolocation;"),
     CMIP5_MODEL_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_model_host_time;"),
     CMIP5_EXPERIMENT_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_experiment_host_time;"),
     CMIP5_VARIABLE_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_variable_host_time;"),
-    CMIP5_DATASET_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_dataset_host_time;");
+    CMIP5_DATASET_HOST_TIME("SELECT * FROM esgf_dashboard.cmip5_dmart_dataset_host_time;"),
     /** cmip5 **/
+
+    /** cmip6 **/
+    CMIP6_CLIENTS_HOST_GEOLOCATION("SELECT * FROM esgf_dashboard.cmip6_dmart_clients_host_geolocation;"),
+    CMIP6_SOURCEID_HOST_TIME("SELECT * FROM esgf_dashboard.cmip6_dmart_source_id_host_time;"),
+    CMIP6_EXPERIMENTID_HOST_TIME("SELECT * FROM esgf_dashboard.cmip6_dmart_experiment_id_host_time;"),
+    CMIP6_VARIABLE_HOST_TIME("SELECT * FROM esgf_dashboard.cmip6_dmart_variable_host_time;"),
+    CMIP6_DATASET_HOST_TIME("SELECT * FROM esgf_dashboard.cmip6_dmart_dataset_host_time;");
+    /** cmip6 **/
 	
 	private final String sql;
 	
